@@ -1,3 +1,41 @@
-#grad {
-    background-image: radial-gradient(white, lightblue, skyblue);
-  }
+html{
+background: #f2f2f2;
+background: radial-gradient(circle, rgba(242, 242, 242, 1) 0%, rgba(105, 160, 219, 1) 50%, rgba(83, 142, 237, 1) 100%);
+justify-content: center;
+align-items: center;
+}
+
+#capaalbum{
+  border-radius: 20px;
+  box-shadow: 2px black;
+  width: 400px;
+  height: 400px;
+  object-fit: cover;
+}
+
+#vinyl {
+      width: 300px;
+      animation: spin 5s linear infinite;
+}
+
+@keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+}
+
+.yeahh{
+  margin-top: 20px;
+}
+
+.yeahh button{
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  transition: 0.5s;
+}
+
+.yeahh button:hover{
+   width: 35px;
+   height: 35px;
+}
+
