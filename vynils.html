@@ -1,32 +1,85 @@
 <html>
     <head>
         <link rel="stylesheet" href="styles.css">
+        <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     </head>
     <body>
     <div class="all">
     <div id ="songs">
         'parte principal'
-        <img id = "vynil "src="https://vinylart.co/wp-content/uploads/2019/09/12inblkwlabelweb.png">
+        <img id="vynil "src="https://vinylart.co/wp-content/uploads/2019/09/12inblkwlabelweb.png">
         <img id="capaalbum" src="imagens/albums.png" alt="capaalbum" />
     </div>
     <div class="yeahh">
-        <button id="before"></button>
-        <button id="pause"></button>
-        <button id="next"></button>
+        <button id="back"><i class="fa-solid fa-backward"></i></button>
+        <button id="pause"><i class="fa-solid fa-pause"></i></button>
+        <button id="next"><i class="fa-solid fa-forward"></i></button>
     </div>
     </div>
     <script>
-        const musicas = [
-            {
-                capaalbum: "https://www.rollingstone.com/wp-content/uploads/2024/06/Tyler-the-Creator-Igor.jpg?w=800"
-            },
-            {
-                capaalbum: "https://www.skillshare.com/blog/wp-content/uploads/2016/06/ScreenShot2020-10-20at11.36.46AM.png"
-            },
-            {
-                capaalbum: "https://www.sleek-mag.com/wp-content/uploads/2017/05/takashi_murakami_kanye_west.jpg"
-            }
+        const playlist = [
+            "taylor swift don't blame me",
+            "taylor swift guilty as sin",
+            "chappel roan casual",
+            "steve lacy n side"
         ]
+    let indiceAtual = 0;
+    let audioAtual = null;
+
+    async function tocarMusica(indice) {
+      const token = "SEU_ACCESS_TOKEN_AQUI"; // coloque aqui seu token do Spotify
+      const nome = playlist[indice];
+      
+      const resposta = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(nome)}&type=track&limit=1`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      const dados = await resposta.json();
+      const musica = dados.tracks.items[0];
+
+      if (!musica) {
+        alert("Música não encontrada!");
+        return;
+      }
+
+      // Troca capa do álbum
+      document.getElementById("capaalbum").src = musica.album.images[0].url;
+
+      // Para música anterior
+      if (audioAtual) audioAtual.pause();
+
+      // Toca preview
+      if (musica.preview_url) {
+        audioAtual = new Audio(musica.preview_url);
+        audioAtual.play();
+      } else {
+        alert("Essa música não tem preview 😢");
+      }
+    }
+
+    // Botões
+    document.getElementById("next").addEventListener("click", () => {
+      indiceAtual = (indiceAtual + 1) % playlist.length;
+      tocarMusica(indiceAtual);
+    });
+
+    document.getElementById("before").addEventListener("click", () => {
+      indiceAtual = (indiceAtual - 1 + playlist.length) % playlist.length;
+      tocarMusica(indiceAtual);
+    });
+
+    document.getElementById("pause").addEventListener("click", () => {
+      if (audioAtual) {
+        if (audioAtual.paused) {
+          audioAtual.play();
+        } else {
+          audioAtual.pause();
+        }
+      }
+    });
+
+    // Começa tocando a primeira
+    tocarMusica(indiceAtual);
     </script>
     </body>
 </html>
